@@ -20,6 +20,16 @@ describe('top-secrets routes', () => {
     expect(res.body).toEqual({ id: expect.any(String), username: 'watson' });
   });
 
+  it('signs in a user', async () => {
+    const user = await UserService.create({
+      username: 'watson',
+      password: 'isadog',
+    });
 
+    const res = await request(app)
+      .post('/api/v1/users/session')
+      .send({ username: 'watson', password: 'isadog' });
+
+    expect(res.body).toEqual({ message: 'Signed in successfully!', user });
   });
 });
