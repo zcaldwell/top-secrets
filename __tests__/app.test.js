@@ -67,8 +67,35 @@ describe('top-secrets routes', () => {
       .send({ username: 'watson', password: 'isadog' });
 
     res = await agent.get('/api/v1/secrets');
-    console.log(res.body);
 
     expect(res.status).toEqual(200);
+  });
+
+  it('should let a user see their secrets', async () => {
+    const agent = request.agent(app);
+
+    await UserService.create({
+      username: 'watson',
+      password: 'isadog',
+    });
+
+    let res = await agent
+      .post('/api/v1/users/session')
+      .send({ username: 'watson', password: 'isadog' });
+
+    res = await agent.post('/api/v1/secrets').send({
+      title: 'Dog Days',
+      description: 'Days about dogs',
+      userId: '1',
+      createdAt: expect.any(String),
+    });
+
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      title: 'Dog Days',
+      description: 'Days about dogs',
+      userId: '1',
+      createdAt: expect.any(String),
+    });
   });
 });
