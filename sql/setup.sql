@@ -17,4 +17,9 @@ CREATE TABLE secrets (
     user_id BIGINT REFERENCES users(id)
 );
 
+INSERT INTO secrets (title, description)
+
+VALUES 
+    ('Its a secret', 'Ill never tell'),
+    ('Just another secret', 'still wont tell')
 
