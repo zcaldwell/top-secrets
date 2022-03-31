@@ -3,7 +3,6 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/UserService');
-const User = require('../lib/models/User');
 
 describe('top-secrets routes', () => {
   beforeEach(() => {
@@ -46,7 +45,7 @@ describe('top-secrets routes', () => {
       .post('/api/v1/users/session')
       .send({ username: 'watson', password: 'isadog' });
 
-    const res = await agent.delete('/api/v1/users/sessions');
+    const res = await agent.delete('/api/v1/users/session');
 
     expect(res.body).toEqual({ message: 'Logged Out' });
   });
@@ -64,10 +63,11 @@ describe('top-secrets routes', () => {
     expect(res.status).toEqual(401);
 
     await agent
-      .post('/api/v1/users/sessions')
+      .post('/api/v1/users/session')
       .send({ username: 'watson', password: 'isadog' });
 
     res = await agent.get('/api/v1/secrets');
+    console.log(res.body);
 
     expect(res.status).toEqual(200);
   });
